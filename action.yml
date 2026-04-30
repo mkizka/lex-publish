@@ -73,7 +73,13 @@ runs:
       if: inputs.check-dns == 'true'
       shell: bash
       working-directory: ${{ inputs.working-directory }}
-      run: goat lex check-dns
+      run: |
+        OUTPUT=$(goat lex check-dns 2>&1)
+        echo "$OUTPUT"
+        if echo "$OUTPUT" | grep -q "did not resolve"; then
+          echo "::error::Some lexicon NSIDs did not resolve via DNS. Please add the required DNS TXT records."
+          exit 1
+        fi
 
     - name: Run goat lex publish
       if: inputs.publish == 'true'
@@ -88,4 +94,9 @@ runs:
           echo "::error::GOAT_PASSWORD environment variable is not set"
           exit 1
         fi
-        goat lex publish
+        OUTPUT=$(goat lex publish 2>&1)
+        echo "$OUTPUT"
+        if echo "$OUTPUT" | grep -q "⭕"; then
+          echo "::error::Some lexicons were skipped during publish. Check DNS configuration."
+          exit 1
+        fi
