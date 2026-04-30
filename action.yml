@@ -1,0 +1,91 @@
+name: "Lex Publish"
+description: "Publish AT Protocol lexicons using the goat CLI"
+branding:
+  icon: "upload-cloud"
+  color: "blue"
+
+inputs:
+  goat-version:
+    description: "Version of goat CLI to install (e.g. 'v0.2.3' or 'latest')"
+    required: false
+    default: "latest"
+  working-directory:
+    description: "Directory containing lexicon files"
+    required: false
+    default: "."
+  lint:
+    description: "Run goat lex lint before publishing"
+    required: false
+    default: "true"
+  check-breaking:
+    description: "Run goat lex breaking before publishing"
+    required: false
+    default: "true"
+  check-dns:
+    description: "Run goat lex check-dns before publishing"
+    required: false
+    default: "true"
+  publish:
+    description: "Run goat lex publish"
+    required: false
+    default: "true"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Resolve goat version
+      id: resolve-version
+      shell: bash
+      run: |
+        VERSION="${{ inputs.goat-version }}"
+        if [ "$VERSION" = "latest" ]; then
+          VERSION=$(curl -s https://api.github.com/repos/bluesky-social/goat/releases/latest | jq -r .tag_name)
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "::error::Failed to resolve latest goat version"
+            exit 1
+          fi
+        fi
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+    - name: Install goat CLI
+      shell: bash
+      run: |
+        VERSION="${{ steps.resolve-version.outputs.version }}"
+        DOWNLOAD_URL="https://github.com/bluesky-social/goat/releases/download/${VERSION}/goat_Linux_x86_64.tar.gz"
+        INSTALL_DIR="${{ github.action_path }}/bin"
+        mkdir -p "$INSTALL_DIR"
+        curl -fsSL "$DOWNLOAD_URL" | tar xz -C "$INSTALL_DIR"
+        echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+
+    - name: Run goat lex lint
+      if: inputs.lint == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: goat lex lint
+
+    - name: Run goat lex breaking
+      if: inputs.check-breaking == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: goat lex breaking
+
+    - name: Run goat lex check-dns
+      if: inputs.check-dns == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: goat lex check-dns
+
+    - name: Run goat lex publish
+      if: inputs.publish == 'true'
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        if [ -z "$GOAT_USERNAME" ]; then
+          echo "::error::GOAT_USERNAME environment variable is not set"
+          exit 1
+        fi
+        if [ -z "$GOAT_PASSWORD" ]; then
+          echo "::error::GOAT_PASSWORD environment variable is not set"
+          exit 1
+        fi
+        goat lex publish

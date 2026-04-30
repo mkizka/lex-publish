@@ -1,0 +1,14 @@
+name: Publish Lexicons
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        env:
+          GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
+          GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
