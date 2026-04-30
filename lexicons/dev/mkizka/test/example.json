@@ -4,7 +4,8 @@
   "defs": {
     "main": {
       "type": "record",
-      "key": "self",
+      "description": "A test record for dev.mkizka.test.example.",
+      "key": "tid",
       "record": {
         "type": "object",
         "required": ["message", "createdAt"],
