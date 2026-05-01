@@ -53,7 +53,7 @@ runs:
 
     - name: Cache goat CLI
       id: cache-goat
-      uses: actions/cache@v4
+      uses: actions/cache@v5
       with:
         path: ${{ runner.tool_cache }}/goat/bin
         key: goat-${{ steps.resolve-version.outputs.version }}-linux-x86_64
