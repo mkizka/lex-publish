@@ -29,6 +29,10 @@ inputs:
     description: "Run goat lex publish"
     required: false
     default: "true"
+  update:
+    description: "Update existing lexicons with --update flag"
+    required: false
+    default: "true"
 
 runs:
   using: "composite"
@@ -94,7 +98,11 @@ runs:
           echo "::error::GOAT_PASSWORD environment variable is not set"
           exit 1
         fi
-        OUTPUT=$(goat lex publish 2>&1)
+        UPDATE_FLAG=""
+        if [ "${{ inputs.update }}" = "true" ]; then
+          UPDATE_FLAG="--update"
+        fi
+        OUTPUT=$(goat lex publish $UPDATE_FLAG 2>&1)
         echo "$OUTPUT"
         if echo "$OUTPUT" | grep -q "⭕"; then
           echo "::error::Some lexicons were skipped during publish. Check DNS configuration."
