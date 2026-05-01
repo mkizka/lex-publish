@@ -51,7 +51,15 @@ runs:
         fi
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
+    - name: Cache goat CLI
+      id: cache-goat
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.action_path }}/bin
+        key: goat-${{ steps.resolve-version.outputs.version }}-linux-x86_64
+
     - name: Install goat CLI
+      if: steps.cache-goat.outputs.cache-hit != 'true'
       shell: bash
       run: |
         VERSION="${{ steps.resolve-version.outputs.version }}"
@@ -59,7 +67,10 @@ runs:
         INSTALL_DIR="${{ github.action_path }}/bin"
         mkdir -p "$INSTALL_DIR"
         curl -fsSL "$DOWNLOAD_URL" | tar xz -C "$INSTALL_DIR"
-        echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+
+    - name: Add goat to PATH
+      shell: bash
+      run: echo "${{ github.action_path }}/bin" >> "$GITHUB_PATH"
 
     - name: Run goat lex lint
       if: inputs.lint == 'true'
