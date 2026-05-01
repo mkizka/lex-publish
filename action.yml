@@ -51,16 +51,11 @@ runs:
         fi
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-    - name: Resolve action bin path
-      id: resolve-bin-path
-      shell: bash
-      run: echo "path=$(realpath "${{ github.action_path }}/bin")" >> "$GITHUB_OUTPUT"
-
     - name: Cache goat CLI
       id: cache-goat
       uses: actions/cache@v4
       with:
-        path: ${{ steps.resolve-bin-path.outputs.path }}
+        path: ${{ runner.tool_cache }}/goat/bin
         key: goat-${{ steps.resolve-version.outputs.version }}-linux-x86_64
 
     - name: Install goat CLI
@@ -69,13 +64,13 @@ runs:
       run: |
         VERSION="${{ steps.resolve-version.outputs.version }}"
         DOWNLOAD_URL="https://github.com/bluesky-social/goat/releases/download/${VERSION}/goat_Linux_x86_64.tar.gz"
-        INSTALL_DIR="${{ steps.resolve-bin-path.outputs.path }}"
+        INSTALL_DIR="${{ runner.tool_cache }}/goat/bin"
         mkdir -p "$INSTALL_DIR"
         curl -fsSL "$DOWNLOAD_URL" | tar xz -C "$INSTALL_DIR"
 
     - name: Add goat to PATH
       shell: bash
-      run: echo "${{ steps.resolve-bin-path.outputs.path }}" >> "$GITHUB_PATH"
+      run: echo "${{ runner.tool_cache }}/goat/bin" >> "$GITHUB_PATH"
 
     - name: Run goat lex lint
       if: inputs.lint == 'true'
