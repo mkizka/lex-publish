@@ -61,6 +61,7 @@ jobs:
 | `check-breaking` | No | `true` | Run `goat lex breaking` |
 | `check-dns` | No | `true` | Run `goat lex check-dns` |
 | `publish` | No | `true` | Run `goat lex publish` |
+| `update` | No | `true` | Pass `--update` flag to `goat lex publish` to update existing lexicons |
 
 ## Authentication
 
