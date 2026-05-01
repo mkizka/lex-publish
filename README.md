@@ -46,7 +46,6 @@ jobs:
 - uses: mkizka/lex-publish@v1
   with:
     goat-version: "v0.2.3"
-    working-directory: "./schemas"
   env:
     GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
     GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
