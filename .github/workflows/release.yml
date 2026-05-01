@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --generate-notes \
+            --title "${{ github.ref_name }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Update major version tag
+        run: |
+          MAJOR_TAG=$(echo "${{ github.ref_name }}" | cut -d. -f1)
+          git tag -f "$MAJOR_TAG"
+          git push origin "$MAJOR_TAG" --force
