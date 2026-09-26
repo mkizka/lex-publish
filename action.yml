@@ -14,7 +14,7 @@ inputs:
     required: false
     default: "."
   paths:
-    description: "Space-separated lexicon files or directories you own (e.g. 'lexicons/com/example')"
+    description: "Lexicon file or directory you own (e.g. 'lexicons/com/example')"
     required: true
   lint:
     description: "Run goat lex lint before publishing"

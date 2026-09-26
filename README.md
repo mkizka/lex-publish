@@ -61,7 +61,7 @@ jobs:
 |------|----------|---------|-------------|
 | `goat-version` | No | `latest` | Version of goat CLI to install (e.g. `v0.2.3`) |
 | `working-directory` | No | `.` | Directory containing lexicon files |
-| `paths` | Yes | | Space-separated lexicon files or directories you own, relative to `working-directory` (e.g. `lexicons/com/example`). Lexicons installed from other authorities (e.g. `app.bsky.*`) must not be included, because `goat lex publish` skips them and this action fails on skipped lexicons |
+| `paths` | Yes | | Lexicon file or directory you own, relative to `working-directory` (e.g. `lexicons/com/example`). Lexicons installed from other authorities (e.g. `app.bsky.*`) must not be included, because `goat lex publish` skips them and this action fails on skipped lexicons |
 | `lint` | No | `true` | Run `goat lex lint` |
 | `check-breaking` | No | `true` | Run `goat lex breaking` |
 | `check-dns` | No | `true` | Run `goat lex check-dns` |
