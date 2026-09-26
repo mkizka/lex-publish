@@ -40,6 +40,19 @@ jobs:
           publish: false
 ```
 
+### Only target your own lexicons
+
+Lexicons installed from other authorities (e.g. `app.bsky.*`) are skipped by `goat lex publish`, and this action fails when a lexicon is skipped. Use `paths` to limit the target to lexicons you own.
+
+```yaml
+- uses: mkizka/lex-publish@v1
+  with:
+    paths: lexicons/com/example
+  env:
+    GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
+    GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
+```
+
 ### Pin goat version
 
 ```yaml
@@ -57,6 +70,7 @@ jobs:
 |------|----------|---------|-------------|
 | `goat-version` | No | `latest` | Version of goat CLI to install (e.g. `v0.2.3`) |
 | `working-directory` | No | `.` | Directory containing lexicon files |
+| `paths` | No | `""` | Space-separated lexicon files or directories passed to goat commands (relative to `working-directory`). Defaults to the entire `lexicons/` directory |
 | `lint` | No | `true` | Run `goat lex lint` |
 | `check-breaking` | No | `true` | Run `goat lex breaking` |
 | `check-dns` | No | `true` | Run `goat lex check-dns` |
