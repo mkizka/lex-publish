@@ -36,6 +36,12 @@ inputs:
     description: "Update existing lexicons with --update flag"
     required: false
     default: "true"
+  username:
+    description: "AT Protocol handle or DID used to publish (required when publish is true)"
+    required: false
+  password:
+    description: "App password used to publish (required when publish is true)"
+    required: false
 
 runs:
   using: "composite"
@@ -121,13 +127,15 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       env:
         LEX_PATHS: ${{ inputs.paths }}
+        GOAT_USERNAME: ${{ inputs.username }}
+        GOAT_PASSWORD: ${{ inputs.password }}
       run: |
         if [ -z "$GOAT_USERNAME" ]; then
-          echo "::error::GOAT_USERNAME environment variable is not set"
+          echo "::error::username input is required when publish is true"
           exit 1
         fi
         if [ -z "$GOAT_PASSWORD" ]; then
-          echo "::error::GOAT_PASSWORD environment variable is not set"
+          echo "::error::password input is required when publish is true"
           exit 1
         fi
         UPDATE_FLAG=""
