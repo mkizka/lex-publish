@@ -114,7 +114,7 @@ runs:
       env:
         LEX_PATHS: ${{ inputs.paths }}
       run: |
-        OUTPUT=$(goat lex check-dns $LEX_PATHS 2>&1)
+        OUTPUT=$(goat lex check-dns $LEX_PATHS 2>&1) || { echo "$OUTPUT"; exit 1; }
         echo "$OUTPUT"
         if echo "$OUTPUT" | grep -q "did not resolve"; then
           echo "::error::Some lexicon NSIDs did not resolve via DNS. Please add the required DNS TXT records."
@@ -142,7 +142,7 @@ runs:
         if [ "${{ inputs.update }}" = "true" ]; then
           UPDATE_FLAG="--update"
         fi
-        OUTPUT=$(goat lex publish $UPDATE_FLAG $LEX_PATHS 2>&1)
+        OUTPUT=$(goat lex publish $UPDATE_FLAG $LEX_PATHS 2>&1) || { echo "$OUTPUT"; exit 1; }
         echo "$OUTPUT"
         if echo "$OUTPUT" | grep -q "⭕"; then
           echo "::error::Some lexicons were skipped during publish. Check DNS configuration."
