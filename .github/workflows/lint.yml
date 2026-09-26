@@ -10,3 +10,4 @@ jobs:
       - uses: ./
         with:
           publish: false
+          paths: lexicons/dev/mkizka

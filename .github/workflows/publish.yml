@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: ./
+        with:
+          paths: lexicons/dev/mkizka
         env:
           GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
           GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}

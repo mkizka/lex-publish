@@ -17,7 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mkizka/lex-publish@v1
+      - uses: mkizka/lex-publish@v2
+        with:
+          paths: lexicons/com/example
         env:
           GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
           GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
@@ -35,16 +37,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: mkizka/lex-publish@v1
+      - uses: mkizka/lex-publish@v2
         with:
+          paths: lexicons/com/example
           publish: false
 ```
 
 ### Pin goat version
 
 ```yaml
-- uses: mkizka/lex-publish@v1
+- uses: mkizka/lex-publish@v2
   with:
+    paths: lexicons/com/example
     goat-version: "v0.2.3"
   env:
     GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
@@ -57,6 +61,7 @@ jobs:
 |------|----------|---------|-------------|
 | `goat-version` | No | `latest` | Version of goat CLI to install (e.g. `v0.2.3`) |
 | `working-directory` | No | `.` | Directory containing lexicon files |
+| `paths` | Yes | | Lexicon file or directory you own (e.g. `lexicons/com/example`) |
 | `lint` | No | `true` | Run `goat lex lint` |
 | `check-breaking` | No | `true` | Run `goat lex breaking` |
 | `check-dns` | No | `true` | Run `goat lex check-dns` |
