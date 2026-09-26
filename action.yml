@@ -14,9 +14,8 @@ inputs:
     required: false
     default: "."
   paths:
-    description: "Space-separated lexicon files or directories to operate on (default: entire lexicons directory)"
-    required: false
-    default: ""
+    description: "Space-separated lexicon files or directories you own (e.g. 'lexicons/com/example')"
+    required: true
   lint:
     description: "Run goat lex lint before publishing"
     required: false
@@ -41,6 +40,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        LEX_PATHS: ${{ inputs.paths }}
+      run: |
+        if [ -z "$LEX_PATHS" ]; then
+          echo "::error::paths input is required"
+          exit 1
+        fi
+
     - name: Resolve goat version
       id: resolve-version
       shell: bash
