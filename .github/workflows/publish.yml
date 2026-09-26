@@ -11,6 +11,5 @@ jobs:
       - uses: ./
         with:
           paths: lexicons/dev/mkizka
-        env:
-          GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
-          GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
+          username: ${{ secrets.GOAT_USERNAME }}
+          password: ${{ secrets.GOAT_PASSWORD }}

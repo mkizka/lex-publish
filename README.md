@@ -20,9 +20,8 @@ jobs:
       - uses: mkizka/lex-publish@v2
         with:
           paths: lexicons/com/example
-        env:
-          GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
-          GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
+          username: ${{ secrets.GOAT_USERNAME }}
+          password: ${{ secrets.GOAT_PASSWORD }}
 ```
 
 ### Lint only on pull requests
@@ -50,9 +49,8 @@ jobs:
   with:
     paths: lexicons/com/example
     goat-version: "v0.2.3"
-  env:
-    GOAT_USERNAME: ${{ secrets.GOAT_USERNAME }}
-    GOAT_PASSWORD: ${{ secrets.GOAT_PASSWORD }}
+    username: ${{ secrets.GOAT_USERNAME }}
+    password: ${{ secrets.GOAT_PASSWORD }}
 ```
 
 ## Inputs
@@ -67,12 +65,5 @@ jobs:
 | `check-dns` | No | `true` | Run `goat lex check-dns` |
 | `publish` | No | `true` | Run `goat lex publish` |
 | `update` | No | `true` | Pass `--update` flag to `goat lex publish` to update existing lexicons |
-
-## Authentication
-
-This action uses environment variables for goat CLI authentication. Set the following secrets in your repository settings (Settings > Secrets and variables > Actions):
-
-| Variable | Description |
-|----------|-------------|
-| `GOAT_USERNAME` | Your AT Protocol handle (e.g. `user.bsky.social`) |
-| `GOAT_PASSWORD` | App Password |
+| `username` | When `publish` is `true` | | Your AT Protocol handle (e.g. `user.bsky.social`) |
+| `password` | When `publish` is `true` | | App Password. Store it in repository secrets |
